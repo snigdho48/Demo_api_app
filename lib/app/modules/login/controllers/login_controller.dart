@@ -1,16 +1,22 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:demo_app/app/shared_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
+import '../../helper_functions.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
   final formKey = GlobalKey<FormState>();
   Rx<String> errMsg = "".obs;
   bool isLogin = false;
+  final register = false.obs;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final name = TextEditingController();
   @override
   void onInit() {
+    BackButtonInterceptor.add(myInterceptor);
     super.onInit();
   }
 
@@ -23,6 +29,8 @@ class LoginController extends GetxController {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    name.dispose();
+    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
 
@@ -54,11 +62,13 @@ class LoginController extends GetxController {
         try {
           await removeemail();
           await removepass();
+          await removename();
         } catch (e) {
           return success;
         }
         await setemail(email: email);
         await setpass(pass: password);
+        await setname(name: name.text);
         await setstatus(isLogin: true);
         isLogin = true;
         print('$getstatus(), $getemail(), $getpass()');

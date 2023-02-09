@@ -1,4 +1,6 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -16,9 +18,40 @@ void showMsg(String msg) => Get.showSnackbar(
         duration: const Duration(seconds: 3),
       ),
     );
+AppBar appbar() {
+  return AppBar(
+    title: Text('HomeView'),
+    centerTitle: true,
+    actions: [
+      IconButton(
+          onPressed: () {
+            Get.dialog(
+              AlertDialog(
+                title: Text('Logout'),
+                content: Text('Are you sure you want to logout?'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text('No')),
+                  TextButton(
+                      onPressed: () {
+                        logout();
+                      },
+                      child: Text('Yes')),
+                ],
+              ),
+            );
+          },
+          icon: Icon(Icons.logout))
+    ],
+  );
+}
+
 Future<void> logout() async {
   await setstatus(isLogin: false);
-  Get.offNamed('/login');
+  Get.offAllNamed('/login')!.then((value) => Get.clearRouteTree());
 }
 
 void jumpToPage(int index) {
@@ -35,8 +68,7 @@ void jumpToPage(int index) {
       Get.offNamed('/profile');
       break;
     case 3:
-      Get.offNamed('/settings');
-
+      Get.offAllNamed('/settings');
       break;
     default:
       Get.offAllNamed('/home');
@@ -124,4 +156,34 @@ class Navigation extends GetView {
           ),
         ));
   }
+}
+
+bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  if (stopDefaultButtonEvent) {
+    return false;
+  } else {
+    jumpToPage(0);
+    return true;
+  }
+}
+
+exitApp() {
+  return Get.dialog(
+    AlertDialog(
+      title: Text('Exit App'),
+      content: Text('Are you sure you want to Exit?'),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text('No')),
+        TextButton(
+            onPressed: () {
+              FlutterExitApp.exitApp(iosForceExit: true);
+            },
+            child: Text('Yes')),
+      ],
+    ),
+  );
 }

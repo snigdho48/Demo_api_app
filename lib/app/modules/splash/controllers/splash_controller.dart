@@ -7,7 +7,6 @@ class SplashController extends GetxController {
   //TODO: Implement SplashController
   Future<void> onInit() async {
     await getModel();
-
     super.onInit();
   }
 

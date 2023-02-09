@@ -1,6 +1,5 @@
+import 'package:demo_app/app/data/Api_Get.dart';
 import 'package:get/get.dart';
-
-import '../../../data/Api_Get.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -14,6 +13,11 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

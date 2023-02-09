@@ -39,3 +39,18 @@ Future<void> removepass() async {
   final pref = await SharedPreferences.getInstance();
   await pref.remove('pass');
 }
+
+Future<void> setname({required String name}) async {
+  final pref = await SharedPreferences.getInstance();
+  await pref.setString('name', name);
+}
+
+Future<String> getname() async {
+  final pref = await SharedPreferences.getInstance();
+  return pref.getString('name') ?? '';
+}
+
+Future<void> removename() async {
+  final pref = await SharedPreferences.getInstance();
+  await pref.remove('name');
+}
