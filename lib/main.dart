@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/Conostant.dart';
+import 'app/modules/networkCheck/bindings/network_check_binding.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -11,6 +12,7 @@ void main() async {
   await GetStorage.init();
   runApp(
     GetMaterialApp(
+      initialBinding: NetworkCheckBinding(),
       builder: EasyLoading.init(),
       defaultTransition: Transition.fadeIn, //
       // transitionDuration: Duration(seconds: 0),

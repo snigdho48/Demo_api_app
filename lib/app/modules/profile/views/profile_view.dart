@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../helper_functions.dart';
 import '../controllers/profile_controller.dart';
@@ -15,6 +16,106 @@ class ProfileView extends GetView<ProfileController> {
         body: Obx(
           () => Column(
             children: [
+              Obx(() => controller.connected.type.value == false
+                  ? GetSnackBar(
+                      title: 'No Internet Connection',
+                      message: 'Please check your internet connection',
+                    )
+                  : Container()),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(children: [
+                      Container(
+                          height: Get.height * 0.25,
+                          child: controller.image != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: controller.image,
+                                )
+                              : Icon(
+                                  Icons.person,
+                                  size: Get.height * 0.25,
+                                  color: Get.theme.primaryColor,
+                                ),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          )),
+                      Positioned(
+                        top: Get.height * 0.03,
+                        right: 0,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue,
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              controller.image = await Get.dialog(Dialog(
+                                child: Container(
+                                  height: 200,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        ' Choose an option to Select Image',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              var newimage = await ImagePicker()
+                                                  .pickImage(
+                                                      source:
+                                                          ImageSource.camera)
+                                                  .then((value) {
+                                                controller.imageUpdate(value);
+                                              });
+                                              Get.back();
+                                            },
+                                            child: Text('Camera'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              await ImagePicker()
+                                                  .pickImage(
+                                                      source:
+                                                          ImageSource.gallery)
+                                                  .then((value) {
+                                                controller.imageUpdate(value);
+                                              });
+                                              Get.back();
+                                            },
+                                            child: Text('Gallery'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ));
+                            },
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 10, left: 10),
                 child: Row(

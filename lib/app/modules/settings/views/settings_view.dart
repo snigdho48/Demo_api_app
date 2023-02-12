@@ -15,6 +15,12 @@ class SettingsView extends GetView<SettingsController> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [
+          Obx(() => controller.connected.type.value == false
+              ? GetSnackBar(
+                  title: 'No Internet Connection',
+                  message: 'Please check your internet connection',
+                )
+              : Container()),
           Container(
             margin: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Row(

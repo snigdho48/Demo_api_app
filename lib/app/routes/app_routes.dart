@@ -10,6 +10,7 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const DETAIL_PREVIEW = _Paths.DETAIL_PREVIEW;
   static const SETTINGS = _Paths.SETTINGS;
+  static const NETWORK_CHECK = _Paths.NETWORK_CHECK;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const DETAIL_PREVIEW = '/detail-preview';
   static const SETTINGS = '/settings';
+  static const NETWORK_CHECK = '/network-check';
 }

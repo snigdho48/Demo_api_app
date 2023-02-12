@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> setstatus({required bool isLogin}) async {
@@ -53,4 +54,15 @@ Future<String> getname() async {
 Future<void> removename() async {
   final pref = await SharedPreferences.getInstance();
   await pref.remove('name');
+}
+
+Future<void> saveImage({required String image}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString("image", image);
+}
+
+Future<Image?> getImage() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String image = prefs.getString("image") ?? '';
+  return Image.asset(image);
 }

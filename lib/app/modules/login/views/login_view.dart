@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -13,21 +14,23 @@ class LoginView extends GetView<LoginController> {
       child: Scaffold(
         backgroundColor: HexColor("#D0E0E8"),
         appBar: AppBar(
-          title: Obx(() => controller.register.value
-              ? Text(
-                  "Register",
-                  style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                )
-              : Text(
-                  "Login",
-                  style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                )),
+          title: Obx(() => controller.connection.type.value
+              ? SizedBox()
+              : controller.register.value
+                  ? Text(
+                      "Register",
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    )
+                  : Text(
+                      "Login",
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    )),
           centerTitle: true,
           backgroundColor: HexColor("#D0E0E8"),
           elevation: 0,
@@ -117,24 +120,40 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextFormField(
-                          obscureText: true,
-                          controller: controller.passwordController,
-                          decoration: InputDecoration(
-                              hintText: 'Password',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                      color: Colors.blue, width: 1))),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please Enter your password';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(children: [
+                            TextField(
+                              controller: controller.passwordController,
+                              decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                      borderSide: const BorderSide(
+                                          color: Colors.blue, width: 1))),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Obx(() => controller.register.value ||
+                                    controller.loginErr.value
+                                ? FlutterPwValidator(
+                                    controller: controller.passwordController,
+                                    minLength: 6,
+                                    normalCharCount: 1,
+                                    uppercaseCharCount: 1,
+                                    numericCharCount: 1,
+                                    specialCharCount: 1,
+                                    width: 400,
+                                    height: 150,
+                                    onSuccess: () {
+                                      print("Matched");
+                                    },
+                                    onFail: (value) {
+                                      print("value");
+                                    },
+                                  )
+                                : SizedBox())
+                          ])),
                       Obx(() => controller.errMsg.value.isNotEmpty
                           ? Center(
                               child: Text(

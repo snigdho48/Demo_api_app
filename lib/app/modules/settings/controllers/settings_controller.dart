@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 
 import '../../../Conostant.dart';
 import '../../helper_functions.dart';
+import '../../networkCheck/controllers/network_check_controller.dart';
 
 class SettingsController extends GetxController {
   //TODO: Implement SettingsController
 
   final theme = false.obs;
+  final connected = Get.put(NetworkCheckController());
 
   @override
   void onInit() {

@@ -2,11 +2,16 @@ import 'package:get/get.dart';
 
 import '../../../data/Api_Get.dart';
 import '../../../shared_pref.dart';
+import '../../networkCheck/controllers/network_check_controller.dart';
 
 class SplashController extends GetxController {
   //TODO: Implement SplashController
+  final connected = Get.put(NetworkCheckController());
+
   Future<void> onInit() async {
-    await getModel();
+    if (connected.type.value) {
+      await getModel();
+    }
     super.onInit();
   }
 
@@ -21,11 +26,11 @@ class SplashController extends GetxController {
     Future? navigator;
     await getstatus().then((value) {
       if (value) {
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(Duration(seconds: 2), () {
           navigator = Get.offNamed('/home');
         });
       } else {
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(Duration(seconds: 2), () {
           navigator = Get.offNamed('/login');
         });
       }

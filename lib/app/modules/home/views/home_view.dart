@@ -17,13 +17,22 @@ class HomeView extends GetView<HomeController> {
         floatingActionButton: navaction(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Obx(() {
-          if (value.value == false) {
-            Center(child: CircularProgressIndicator());
+          if (value.value == false &&
+              controller.connected.value.type.value == true) {
+            getModel();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           return SingleChildScrollView(
             child: Column(
               children: [
+                if (controller.connected.value.type.value == false)
+                  GetSnackBar(
+                    title: 'No Internet Connection',
+                    message: 'Please check your internet connection',
+                  ),
                 for (var i = 0; i < lmodel.length; i++)
                   InkWell(
                     onTap: () {

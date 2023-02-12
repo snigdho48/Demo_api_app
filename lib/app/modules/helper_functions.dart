@@ -11,6 +11,7 @@ import '../shared_pref.dart';
 //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 final selected = 0.obs;
 Rx<bool> heart = false.obs;
+
 void showMsg(String msg) => Get.showSnackbar(
       GetSnackBar(
         title: msg,
@@ -51,7 +52,8 @@ AppBar appbar() {
 
 Future<void> logout() async {
   await setstatus(isLogin: false);
-  Get.offAllNamed('/login')!.then((value) => Get.clearRouteTree());
+  Get.offAllNamed('/login')!
+      .then((value) => Get.reset(clearRouteBindings: true));
 }
 
 void jumpToPage(int index) {
