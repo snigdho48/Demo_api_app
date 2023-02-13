@@ -21,7 +21,7 @@ void showMsg(String msg) => Get.showSnackbar(
     );
 AppBar appbar() {
   return AppBar(
-    title: Text('HomeView'),
+    title: Text(Get.currentRoute.toUpperCase().split('/').last),
     centerTitle: true,
     actions: [
       IconButton(
@@ -64,10 +64,10 @@ void jumpToPage(int index) {
       Get.offAllNamed('/home');
       break;
     case 1:
-      Get.offNamed('/dashboard');
+      Get.offAllNamed('/imagedashboard');
       break;
     case 2:
-      Get.offNamed('/profile');
+      Get.offAllNamed('/profile');
       break;
     case 3:
       Get.offAllNamed('/settings');

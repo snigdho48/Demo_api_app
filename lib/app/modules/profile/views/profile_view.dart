@@ -30,17 +30,19 @@ class ProfileView extends GetView<ProfileController> {
                   children: [
                     Stack(children: [
                       Container(
-                          height: Get.height * 0.25,
-                          child: controller.image != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: controller.image,
-                                )
-                              : Icon(
-                                  Icons.person,
-                                  size: Get.height * 0.25,
-                                  color: Get.theme.primaryColor,
-                                ),
+                          width: Get.width * 0.5,
+                          height: Get.width * 0.5,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Obx(
+                              () =>
+                                  controller.image.value ??
+                                  Icon(
+                                    Icons.person,
+                                    size: 100,
+                                  ),
+                            ),
+                          ),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           )),
@@ -57,7 +59,7 @@ class ProfileView extends GetView<ProfileController> {
                           child: IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () async {
-                              controller.image = await Get.dialog(Dialog(
+                              controller.image.value = await Get.dialog(Dialog(
                                 child: Container(
                                   height: 200,
                                   child: Column(
@@ -78,27 +80,87 @@ class ProfileView extends GetView<ProfileController> {
                                         children: [
                                           ElevatedButton(
                                             onPressed: () async {
-                                              var newimage = await ImagePicker()
-                                                  .pickImage(
-                                                      source:
-                                                          ImageSource.camera)
-                                                  .then((value) {
-                                                controller.imageUpdate(value);
-                                              });
-                                              Get.back();
+                                              await controller
+                                                  .checkCameraPermission()
+                                                  .then((value) async {
+                                                if (controller
+                                                        .hasCameraPermission ==
+                                                    true) {
+                                                  await ImagePicker()
+                                                      .pickImage(
+                                                        source:
+                                                            ImageSource.camera,
+                                                        imageQuality: 25,
+                                                      )
+                                                      .then((value) async {
+                                                        if (value != null) {
+                                                          controller
+                                                                  .image.value =
+                                                              await controller
+                                                                  .imageUpdate(
+                                                                      value);
+                                                        }
+                                                      })
+                                                      .then((value) =>
+                                                          GetSnackBar(
+                                                            title:
+                                                                'Image Updated',
+                                                            message:
+                                                                'Image Updated Successfully',
+                                                          ))
+                                                      .then((value) =>
+                                                          Get.back());
+                                                } else {
+                                                  GetSnackBar(
+                                                    title: 'Permission Denied',
+                                                    message:
+                                                        'Please allow camera permission',
+                                                  );
+                                                  controller.update();
+                                                }
+                                              }).then((value) => Get.back());
                                             },
                                             child: Text('Camera'),
                                           ),
                                           ElevatedButton(
                                             onPressed: () async {
-                                              await ImagePicker()
-                                                  .pickImage(
-                                                      source:
-                                                          ImageSource.gallery)
-                                                  .then((value) {
-                                                controller.imageUpdate(value);
-                                              });
-                                              Get.back();
+                                              await controller
+                                                  .checkfilePermission()
+                                                  .then((value) async {
+                                                if (controller
+                                                        .hasstoragePermission ==
+                                                    true) {
+                                                  await ImagePicker()
+                                                      .pickImage(
+                                                        source:
+                                                            ImageSource.gallery,
+                                                        imageQuality: 25,
+                                                      )
+                                                      .then((value) async {
+                                                        if (value != null) {
+                                                          await controller
+                                                              .imageUpdate(
+                                                                  value);
+                                                        }
+                                                      })
+                                                      .then((value) =>
+                                                          GetSnackBar(
+                                                            title:
+                                                                'Image Updated',
+                                                            message:
+                                                                'Image Updated Successfully',
+                                                          ))
+                                                      .then((value) =>
+                                                          Get.back());
+                                                } else {
+                                                  GetSnackBar(
+                                                    title: 'Permission Denied',
+                                                    message:
+                                                        'Please allow Storage permission',
+                                                  );
+                                                  controller.update();
+                                                }
+                                              }).then((value) => Get.back());
                                             },
                                             child: Text('Gallery'),
                                           ),

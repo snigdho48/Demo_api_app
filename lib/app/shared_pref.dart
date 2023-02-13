@@ -1,4 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> setstatus({required bool isLogin}) async {
@@ -58,11 +61,31 @@ Future<void> removename() async {
 
 Future<void> saveImage({required String image}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString("image", image);
+  final base64ImageString = convertIntoBase64(File(image));
+  prefs.setString("image", base64ImageString);
 }
 
-Future<Image?> getImage() async {
+Future<CachedMemoryImage?> getImage() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String image = prefs.getString("image") ?? '';
-  return Image.asset(image);
+  try {
+    print('success');
+    return CachedMemoryImage(
+      uniqueKey: 'app://image/1',
+      base64: image,
+    );
+  } catch (e) {
+    return null;
+  }
+}
+
+String convertIntoBase64(var file) {
+  List<int> imageBytes = file.readAsBytesSync();
+  String base64File = base64Encode(imageBytes);
+  return base64File;
+}
+
+Future<void> removeImage() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove("image");
 }

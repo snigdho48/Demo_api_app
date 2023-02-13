@@ -11,6 +11,7 @@ class HomeController extends GetxController {
     print(connected.value.type.value.toString());
     if (await connected.value.type.value) {
       await getModel();
+      print('connected');
     }
     super.onInit();
   }

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:demo_app/app/modules/Imagedashboard/bindings/imagedashboard_binding.dart';
+import 'package:demo_app/app/modules/Imagedashboard/views/imagedashboard_view.dart';
 import 'package:demo_app/app/modules/detailPreview/bindings/detail_preview_binding.dart';
 import 'package:demo_app/app/modules/detailPreview/views/detail_preview_view.dart';
 import 'package:demo_app/app/modules/home/bindings/home_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.NETWORK_CHECK,
       page: () => NetworkCheckView(),
       binding: NetworkCheckBinding(),
+    ),
+    GetPage(
+      name: _Paths.IMAGEDASHBOARD,
+      page: () => ImagedashboardView(),
+      binding: ImagedashboardBinding(),
     ),
   ];
 }

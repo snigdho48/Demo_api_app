@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:cached_memory_image/cached_memory_image.dart';
+import 'package:demo_app/app/modules/widgets/imageCroper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../shared_pref.dart';
 import '../../helper_functions.dart';
@@ -13,7 +12,9 @@ import '../../networkCheck/controllers/network_check_controller.dart';
 
 class ProfileController extends GetxController {
   //TODO: Implement ProfileController
-  Image? image = null;
+  bool hasCameraPermission = false;
+  bool hasstoragePermission = false;
+  Rx<CachedMemoryImage?> image = Rx<CachedMemoryImage?>(null);
   Rx<String> email = ''.obs;
   Rx<String> username = ''.obs;
   Rx<String> password = ''.obs;
@@ -28,13 +29,8 @@ class ProfileController extends GetxController {
     email.value = await getemail();
     password.value = await getpass();
     username.value = await getname();
-    try {
-      image = await getImage();
-    } catch (e) {
-      print(e);
-    }
+    image.value = await getImage();
     BackButtonInterceptor.add(myInterceptor);
-
     super.onInit();
   }
 
@@ -66,33 +62,46 @@ class ProfileController extends GetxController {
     dispose();
   }
 
-  void imageUpdate(updateimage) async {
-    if (updateimage != null) {
-      final _image = path.basename(updateimage.path);
-      final Directory docDir = await getApplicationDocumentsDirectory();
-      final String localPath = docDir.path;
-      File file = File('$localPath/${path.split('/').last}$_image');
-      final imageBytes = await rootBundle.load('assets/images/$_image');
-      final buffer = imageBytes.buffer;
-      File newFile = await file.writeAsBytes(buffer.asUint8List(
-          imageBytes.offsetInBytes, imageBytes.lengthInBytes));
-      await saveImage(image: newFile.path);
-      image = await getImage();
-      update();
+  Future<void> checkCameraPermission() async {
+    await Permission.camera.request();
+    final status = await Permission.camera.status;
+    if (status.isGranted) {
+      hasCameraPermission = true;
+      update(); // only needed if you're using GetBuilder widget
+      return; // ending the function here because that's all you need.
     }
+
+    if (status.isDenied) {
+      await Permission.camera.request();
+    }
+    // ...continue to handle all the possible outcomes
     update();
   }
 
-  Future<File> moveFile(File sourceFile, String newPath) async {
-    try {
-      /// prefer using rename as it is probably faster
-      /// if same directory path
-      return await sourceFile.rename(newPath);
-    } catch (e) {
-      /// if rename fails, copy the source file
-      final newFile = await sourceFile.copy(newPath);
-      return newFile;
+  Future<void> checkfilePermission() async {
+    final status = await Permission.manageExternalStorage.status;
+
+    if (status.isGranted) {
+      hasstoragePermission = true;
+      update(); // only needed if you're using GetBuilder widget
+      return; // ending the function here because that's all you need.
     }
+
+    if (status.isDenied) {
+      await Permission.manageExternalStorage.request();
+    } // ...continue to handle all the possible outcomes
+    update();
+  }
+
+  Future<CachedMemoryImage?> imageUpdate(XFile? updateimage) async {
+    if (updateimage != null) {
+      final lastimage = await cropImage(pickedFile: updateimage);
+      if (lastimage != null) {
+        await saveImage(image: lastimage);
+      }
+    }
+    image.value = await getImage();
+    return image.value;
   }
 
   void updateinfo() async {

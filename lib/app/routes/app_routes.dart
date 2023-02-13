@@ -11,6 +11,7 @@ abstract class Routes {
   static const DETAIL_PREVIEW = _Paths.DETAIL_PREVIEW;
   static const SETTINGS = _Paths.SETTINGS;
   static const NETWORK_CHECK = _Paths.NETWORK_CHECK;
+  static const IMAGEDASHBOARD = _Paths.IMAGEDASHBOARD;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const DETAIL_PREVIEW = '/detail-preview';
   static const SETTINGS = '/settings';
   static const NETWORK_CHECK = '/network-check';
+  static const IMAGEDASHBOARD = '/imagedashboard';
 }
