@@ -80,9 +80,10 @@ class LoginView extends GetView<LoginController> {
                                             color: Colors.blue, width: 1))),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please Enter your Name';
+                                    controller.errMsg.value =
+                                        'Please Enter your Name';
+                                    return controller.errMsg.value;
                                   }
-                                  return null;
                                 },
                               ),
                             )
@@ -138,18 +139,19 @@ class LoginView extends GetView<LoginController> {
                                     controller.loginErr.value
                                 ? FlutterPwValidator(
                                     controller: controller.passwordController,
-                                    minLength: 6,
-                                    normalCharCount: 1,
+                                    minLength: 8,
                                     uppercaseCharCount: 1,
                                     numericCharCount: 1,
                                     specialCharCount: 1,
+                                    normalCharCount: 2,
                                     width: 400,
                                     height: 150,
                                     onSuccess: () {
-                                      print("Matched");
+                                      controller.errMsg.value = "";
                                     },
-                                    onFail: (value) {
-                                      print("value");
+                                    onFail: () {
+                                      controller.errMsg.value =
+                                          "Password is not strong enough";
                                     },
                                   )
                                 : SizedBox())
@@ -183,12 +185,24 @@ class LoginView extends GetView<LoginController> {
                                     )),
                               onPressed: () async {
                                 if (controller.register.value) {
-                                  controller.isLogin = false;
+                                  if (controller.errMsg.value ==
+                                      "Password is not strong enough") {
+                                    await controller.loginState().then(
+                                        (value) => value
+                                            ? Get.offAllNamed('/home')
+                                            : null);
+                                  } else {
+                                    controller.isLogin = false;
+                                    await controller.loginState().then(
+                                        (value) => value
+                                            ? Get.offAllNamed('/home')
+                                            : null);
+                                  }
                                 } else {
                                   controller.isLogin = true;
+                                  await controller.loginState().then((value) =>
+                                      value ? Get.offAllNamed('/home') : null);
                                 }
-                                await controller.loginState().then((value) =>
-                                    value ? Get.offAllNamed('/home') : null);
                               },
                             ),
                           ),

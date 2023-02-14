@@ -98,9 +98,10 @@ class ProfileController extends GetxController {
       final lastimage = await cropImage(pickedFile: updateimage);
       if (lastimage != null) {
         await saveImage(image: lastimage);
+        image.value = await getImage();
+        update();
       }
     }
-    image.value = await getImage();
     return image.value;
   }
 

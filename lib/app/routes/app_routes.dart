@@ -12,6 +12,7 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const NETWORK_CHECK = _Paths.NETWORK_CHECK;
   static const IMAGEDASHBOARD = _Paths.IMAGEDASHBOARD;
+  static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const NETWORK_CHECK = '/network-check';
   static const IMAGEDASHBOARD = '/imagedashboard';
+  static const NOTIFICATIONS = '/notifications';
 }

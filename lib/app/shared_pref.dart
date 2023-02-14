@@ -80,7 +80,7 @@ Future<CachedMemoryImage?> getImage() async {
 }
 
 String convertIntoBase64(var file) {
-  List<int> imageBytes = file.readAsBytesSync();
+  var imageBytes = file.writeAsBytes;
   String base64File = base64Encode(imageBytes);
   return base64File;
 }

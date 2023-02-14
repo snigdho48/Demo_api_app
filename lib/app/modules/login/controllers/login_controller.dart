@@ -1,7 +1,7 @@
 import 'package:demo_app/app/modules/networkCheck/controllers/network_check_controller.dart';
 import 'package:demo_app/app/shared_pref.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:get/get.dart';
 
@@ -82,6 +82,25 @@ class LoginController extends GetxController {
             }
           }
         } else {
+          if (errMsg.value == "Password is not strong enough") {
+            Get.showSnackbar(
+              GetSnackBar(
+                backgroundColor: Colors.redAccent,
+                messageText: Text(
+                  "Password is not strong enough",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                duration: const Duration(seconds: 3),
+                snackPosition: SnackPosition.TOP,
+              ),
+            );
+            return success;
+          }
+
           try {
             await removeemail();
             await removepass();

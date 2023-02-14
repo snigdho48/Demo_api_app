@@ -10,6 +10,8 @@ import 'package:demo_app/app/modules/login/bindings/login_binding.dart';
 import 'package:demo_app/app/modules/login/views/login_view.dart';
 import 'package:demo_app/app/modules/networkCheck/bindings/network_check_binding.dart';
 import 'package:demo_app/app/modules/networkCheck/views/network_check_view.dart';
+import 'package:demo_app/app/modules/notifications/bindings/notifications_binding.dart';
+import 'package:demo_app/app/modules/notifications/views/notifications_view.dart';
 import 'package:demo_app/app/modules/profile/bindings/profile_binding.dart';
 import 'package:demo_app/app/modules/profile/views/profile_view.dart';
 import 'package:demo_app/app/modules/settings/bindings/settings_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.IMAGEDASHBOARD,
       page: () => ImagedashboardView(),
       binding: ImagedashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => NotificationsView(),
+      binding: NotificationsBinding(),
     ),
   ];
 }

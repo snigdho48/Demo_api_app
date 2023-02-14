@@ -1,6 +1,10 @@
 import 'package:demo_app/app/data/Api_Get.dart';
 import 'package:demo_app/app/modules/networkCheck/controllers/network_check_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../../services/notification.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -13,6 +17,14 @@ class HomeController extends GetxController {
       await getModel();
       print('connected');
     }
+    await Permission.notification.isDenied.then((value) async {
+      NotificationService notificationService = NotificationService();
+      await notificationService.init();
+      await notificationService.requestIOSPermissions();
+      await notificationService.requestAndroidPermission();
+      await SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp]);
+    });
     super.onInit();
   }
 
