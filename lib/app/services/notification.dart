@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -98,20 +99,22 @@ class NotificationService {
       title,
       body,
       notificationDetails,
-      payload: payload,
+      payload: jsonEncode(payload),
     );
   }
 
   Future<void> scheduleNotification(
       int id, String title, String body, DateTime eventDate,
       [DateTimeComponents? dateTimeComponents]) async {
-    final payload = {
-      'id': id,
-      'title': title,
-      'body': body,
-      'eventDate': eventDate
-    };
+    final payload = [
+      id,
+      title,
+      body,
+      DateFormat('dd/MM/yyyy HH:mm:ss').format(eventDate).toString()
+    ];
     final scheduledTime = eventDate;
+    tz.initializeTimeZones();
+
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
@@ -121,7 +124,7 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
-      payload: json.encode(payload),
+      payload: jsonEncode(payload),
       matchDateTimeComponents: dateTimeComponents,
     );
     print('$payload is payload');
@@ -136,9 +139,8 @@ class NotificationService {
   }
 
   Future<void> onSelectNotification(String? payload) async {
-    await flutterLocalNotificationsPlugin
-        .getNotificationAppLaunchDetails()
-        .then((value) =>
-            Get.to('/notification', arguments: json.decode(payload!)));
+    final json = jsonDecode(payload!);
+    print(json.runtimeType);
+    await Get.toNamed('/notifications', arguments: json);
   }
 }

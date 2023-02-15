@@ -5,23 +5,21 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../services/notification.dart';
+import '../../../services/notification.service.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
   final connected = Get.put(NetworkCheckController()).obs;
-
   @override
   Future<void> onInit() async {
-    print(connected.value.type.value.toString());
+    await getandsetAllPush();
     if (await connected.value.type.value) {
       await getModel();
       print('connected');
     }
     await Permission.notification.isDenied.then((value) async {
-      NotificationService notificationService = NotificationService();
-      await notificationService.init();
-      await notificationService.requestIOSPermissions();
-      await notificationService.requestAndroidPermission();
+      await NotificationService().requestIOSPermissions();
+      await NotificationService().requestAndroidPermission();
       await SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp]);
     });

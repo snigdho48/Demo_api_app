@@ -4,6 +4,22 @@ import 'dart:io';
 import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Future<void> saveNoti({required List list}) async {
+  final pref = await SharedPreferences.getInstance();
+  final encode =
+      List.generate(list.length, (index) => jsonEncode(list[index].toString()));
+  await pref.setStringList('encode', encode);
+}
+
+Future<List> getNoti() async {
+  final pref = await SharedPreferences.getInstance();
+  final store = pref.getStringList('encode') ?? [];
+  List decoded =
+      List.generate(store.length, (index) => jsonDecode(store[index]));
+  print(decoded);
+  return decoded;
+}
+
 Future<void> setstatus({required bool isLogin}) async {
   final pref = await SharedPreferences.getInstance();
   await pref.setBool('isLogin', isLogin);
