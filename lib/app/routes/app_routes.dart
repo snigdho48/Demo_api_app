@@ -13,6 +13,7 @@ abstract class Routes {
   static const NETWORK_CHECK = _Paths.NETWORK_CHECK;
   static const IMAGEDASHBOARD = _Paths.IMAGEDASHBOARD;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const CV = _Paths.CV;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const NETWORK_CHECK = '/network-check';
   static const IMAGEDASHBOARD = '/imagedashboard';
   static const NOTIFICATIONS = '/notifications';
+  static const CV = '/cv';
 }

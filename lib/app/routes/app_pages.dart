@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import 'package:demo_app/app/modules/Imagedashboard/bindings/imagedashboard_binding.dart';
 import 'package:demo_app/app/modules/Imagedashboard/views/imagedashboard_view.dart';
+import 'package:demo_app/app/modules/cv/bindings/cv_binding.dart';
+import 'package:demo_app/app/modules/cv/views/cv_view.dart';
 import 'package:demo_app/app/modules/detailPreview/bindings/detail_preview_binding.dart';
 import 'package:demo_app/app/modules/detailPreview/views/detail_preview_view.dart';
 import 'package:demo_app/app/modules/home/bindings/home_binding.dart';
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.NOTIFICATIONS,
       page: () => NotificationsView(),
       binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CV,
+      page: () => CvView(),
+      binding: CvBinding(),
     ),
   ];
 }

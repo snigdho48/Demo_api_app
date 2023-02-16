@@ -9,7 +9,38 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appbar(),
+        appBar: AppBar(
+          title: Text('PROFILE'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.toNamed('/cv');
+                },
+                icon: Icon(Icons.edit_document)),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () => Get.dialog(
+                AlertDialog(
+                  title: Text('Logout'),
+                  content: Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Text('No')),
+                    TextButton(
+                        onPressed: () {
+                          logout();
+                        },
+                        child: Text('Yes')),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
         bottomNavigationBar: Navigation(),
         floatingActionButton: navaction(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

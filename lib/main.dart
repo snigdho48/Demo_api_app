@@ -9,15 +9,12 @@ import 'app/Conostant.dart';
 import 'app/modules/networkCheck/bindings/network_check_binding.dart';
 import 'app/modules/notifications/bindings/notifications_binding.dart';
 import 'app/routes/app_pages.dart';
-import 'app/services/notification.dart';
 import 'app/services/notification.service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await GetStorage.init();
-  NotificationService notificationService = NotificationService();
-  await notificationService.init();
   Workmanager().initialize(
     callbackDispatcher,
     isInDebugMode: true,

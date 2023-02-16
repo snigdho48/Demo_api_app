@@ -12,6 +12,7 @@ List PushNoti = [];
 
 Future<void> getandsetAllPush() async {
   bool newInstall = false;
+  PushNoti = await getNoti();
   Db.getNoti().listen((event) async {
     if (PushNoti.isEmpty) {
       PushNoti = event.docs.map((e) => e.data()).toList();
@@ -76,4 +77,13 @@ void callbackDispatcher() {
     await getandsetAllPush();
     return Future.value(true);
   });
+  Workmanager().registerPeriodicTask(
+    "1",
+    "simplePeriodicTask",
+    frequency: Duration(minutes: 15),
+    initialDelay: Duration(seconds: 10),
+    constraints: Constraints(
+      networkType: NetworkType.connected,
+    ),
+  );
 }
