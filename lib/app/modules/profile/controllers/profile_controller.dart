@@ -49,10 +49,10 @@ class ProfileController extends GetxController {
 
   @override
   void dispose() {
-    newPassword.dispose();
-    oldPassword.dispose();
-    name.dispose();
-    newenail.dispose();
+    oldPassword.clear();
+    newPassword.clear();
+    name.clear();
+    newenail.clear();
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }

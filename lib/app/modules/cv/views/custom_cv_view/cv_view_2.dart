@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:radio_group_v2/radio_group_v2.dart';
 
 import '../../../widgets/map.dart';
@@ -29,9 +30,12 @@ class Second_step extends GetView {
           padding:
               const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
           child: RadioGroup(
+            onChanged: (value) {
+              controller.gender.value.value = value;
+            },
             controller: controller.gender.value,
             values: ["Male", "Female", "Other"],
-            indexOfDefault: 0,
+            indexOfDefault: -1,
             orientation: RadioGroupOrientation.Vertical,
             decoration: RadioGroupDecoration(
               spacing: 10.0,
@@ -74,13 +78,16 @@ class Second_step extends GetView {
                 right: 10,
                 child: IconButton(
                   onPressed: () async {
+                    if (await Permission.location.isDenied) {
+                      await Permission.location.request();
+                    }
                     await showMapInputDialog(
                         context: context,
                         title: 'Select Location',
                         onSubmit: (value, map) {
-                          value = value.split(map['city'])[0];
                           EasyLoading.show(status: 'Please wait');
                           controller.address.value.text = value;
+                          print(value);
                           EasyLoading.dismiss();
                         });
                   },
@@ -100,7 +107,20 @@ class Second_step extends GetView {
             ),
             ElevatedButton(
               onPressed: () {
-                controller.activeIndex.value++;
+                if (controller.formKey.currentState!.validate()) {
+                  if (controller.gender.value.value == null) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Select Gender')));
+                  } else if (controller.address.value.text.isEmpty) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Give Address')));
+                  } else {
+                    controller.activeIndex.value++;
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Fill all the fields')));
+                }
               },
               child: const Text('Next'),
             ),

@@ -1,8 +1,14 @@
+import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../data/DB.dart';
 import '../shared_pref.dart';
@@ -56,13 +62,13 @@ void sendScheduleNotification(element, rng) {
   // final Date = DateTime.parse(element['time'].toDate().toString());
   final id = rng.nextInt(1000);
   NotificationService().scheduleNotification(
-      id, element['msg'], element['msg'], element['time'].toDate().toLocal());
+      1, element['msg'], element['msg'], element['time'].toDate().toLocal());
 }
 
 void sendNotification(element, rng) {
   final id = rng.nextInt(1000);
   NotificationService()
-      .showNotification(id, element['msg'], element['msg'], payload: [
+      .showNotification(1, element['msg'], element['msg'], payload: [
     id,
     element['msg'],
     element['msg'],
@@ -70,20 +76,38 @@ void sendNotification(element, rng) {
   ]);
 }
 
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    NotificationService notificationService = NotificationService();
-    await notificationService.init();
+@pragma('vm:entry-point')
+Future<void> onStart(ServiceInstance service) async {
+  Timer.periodic(const Duration(seconds: 10), (timer) async {
+    await Firebase.initializeApp();
     await getandsetAllPush();
-    return Future.value(true);
+    if (Get.routing.current == '/home') {
+      await Permission.notification.isDenied.then((value) async {
+        await NotificationService().requestIOSPermissions();
+        await NotificationService().requestAndroidPermission();
+        await SystemChrome.setPreferredOrientations(
+            [DeviceOrientation.portraitUp]);
+      });
+    }
+    service.on('setAsBackground').listen((event) async {
+      await getandsetAllPush();
+    });
   });
-  Workmanager().registerPeriodicTask(
-    "1",
-    "simplePeriodicTask",
-    frequency: Duration(minutes: 15),
-    initialDelay: Duration(seconds: 10),
-    constraints: Constraints(
-      networkType: NetworkType.connected,
+}
+
+Future<void> backgroundinit() async {
+  DartPluginRegistrant.ensureInitialized();
+  NotificationService notificationService = NotificationService();
+  await notificationService.init();
+  final service = FlutterBackgroundService();
+  service.invoke('setAsBackground');
+  await service.configure(
+    androidConfiguration: AndroidConfiguration(
+      autoStartOnBoot: true,
+      onStart: onStart,
+      autoStart: true,
+      isForegroundMode: true,
     ),
+    iosConfiguration: IosConfiguration(),
   );
 }

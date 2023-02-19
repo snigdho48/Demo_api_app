@@ -104,7 +104,12 @@ class First_step extends GetView {
             ),
             ElevatedButton(
               onPressed: () {
-                controller.activeIndex.value++;
+                if (controller.formKey.currentState!.validate()) {
+                  controller.activeIndex.value++;
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Fill all the fields')));
+                }
               },
               child: const Text('Next'),
             ),

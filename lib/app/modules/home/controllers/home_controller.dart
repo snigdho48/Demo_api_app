@@ -12,17 +12,19 @@ class HomeController extends GetxController {
   final connected = Get.put(NetworkCheckController()).obs;
   @override
   Future<void> onInit() async {
-    await getandsetAllPush();
-    if (await connected.value.type.value) {
-      await getModel();
-      print('connected');
-    }
     await Permission.notification.isDenied.then((value) async {
       await NotificationService().requestIOSPermissions();
       await NotificationService().requestAndroidPermission();
       await SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp]);
     });
+
+    if (await connected.value.type.value) {
+      await getandsetAllPush();
+      await getModel();
+      print('connected');
+    }
+
     super.onInit();
   }
 

@@ -1,4 +1,3 @@
-import 'package:checkbox_grouped/checkbox_grouped.dart';
 import 'package:demo_app/app/modules/cv/controllers/cv_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,17 +25,53 @@ class Third_step extends GetView {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 15),
-            child: SimpleGroupedCheckbox<int>(
-              controller: controller.education.value,
-              itemsTitle: ["SSC", "HSC", "BSC", "MSC"],
-              values: [1, 2, 4, 5],
-              groupStyle: GroupStyle(
-                  activeColor: Colors.red,
-                  itemTitleStyle: TextStyle(fontSize: 13)),
-              checkFirstElement: false,
-            ),
-          ),
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                children: [
+                  for (var item in controller.checkboxList)
+                    Obx(
+                      () => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(item.text),
+                            if (item.checked.value)
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please Enter your CGPA';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) =>
+                                        item.value.value = value,
+                                    decoration: InputDecoration(
+                                        constraints: BoxConstraints(
+                                            maxHeight: 60, minHeight: 60),
+                                        hintText: 'Enter CGPA',
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            borderSide: const BorderSide(
+                                                color: Colors.blue, width: 1))),
+                                  ),
+                                ),
+                              ),
+                            Checkbox(
+                              value: item.checked.value,
+                              onChanged: (value) => item.checked.value = value!,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                ],
+              )),
           const Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 15),
             child: Text(
@@ -75,7 +110,9 @@ class Third_step extends GetView {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      controller.activeIndex.value++;
+                      if (controller.formKey.currentState!.validate()) {
+                        controller.activeIndex.value++;
+                      }
                     },
                     child: const Text('Next'),
                   ),

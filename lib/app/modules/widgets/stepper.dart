@@ -1,13 +1,14 @@
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../cv/controllers/cv_controller.dart';
+
+final controller = Get.put(CvController());
 List<StepperData> stepperData = [
   StepperData(
       title: StepperText(
         "1st Step",
-        textStyle: const TextStyle(
-          color: Colors.grey,
-        ),
       ),
       subtitle: StepperText("Name,Email,Phone Number"),
       iconWidget: Container(
