@@ -80,6 +80,8 @@ void sendNotification(element, rng) {
 Future<void> onStart(ServiceInstance service) async {
   Timer.periodic(const Duration(seconds: 10), (timer) async {
     await Firebase.initializeApp();
+    NotificationService notificationService = NotificationService();
+    await notificationService.init();
     await getandsetAllPush();
     if (Get.routing.current == '/home') {
       await Permission.notification.isDenied.then((value) async {
@@ -89,16 +91,14 @@ Future<void> onStart(ServiceInstance service) async {
             [DeviceOrientation.portraitUp]);
       });
     }
-    service.on('setAsBackground').listen((event) async {
-      await getandsetAllPush();
-    });
+    // service.on('setAsBackground').listen((event) async {
+    //   await getandsetAllPush();
+    // });
   });
 }
 
 Future<void> backgroundinit() async {
   DartPluginRegistrant.ensureInitialized();
-  NotificationService notificationService = NotificationService();
-  await notificationService.init();
   final service = FlutterBackgroundService();
   service.invoke('setAsBackground');
   await service.configure(

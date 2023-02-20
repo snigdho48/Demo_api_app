@@ -140,7 +140,6 @@ class NotificationService {
 
   Future<void> onSelectNotification(String? payload) async {
     final json = jsonDecode(payload!);
-    print(json.runtimeType);
     await Get.toNamed('/notifications', arguments: json);
   }
 }

@@ -24,17 +24,22 @@ class SplashController extends GetxController {
   void onClose() {}
   futureCall() async {
     Future? navigator;
-    await getstatus().then((value) {
-      if (value) {
-        Future.delayed(Duration(seconds: 2), () {
-          navigator = Get.offNamed('/home');
-        });
-      } else {
-        Future.delayed(Duration(seconds: 2), () {
-          navigator = Get.offNamed('/login');
-        });
-      }
-    });
+    if(Get.arguments != null){
+      await Get.toNamed('/notifications', arguments: Get.arguments);
+    }else{
+      await getstatus().then((value) {
+        if (value) {
+          Future.delayed(Duration(seconds: 2), () {
+            navigator = Get.offNamed('/home');
+          });
+        } else {
+          Future.delayed(Duration(seconds: 2), () {
+            navigator = Get.offNamed('/login');
+          });
+        }
+      });
+    }
+
     return navigator;
   }
 }

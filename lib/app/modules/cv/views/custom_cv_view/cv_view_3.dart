@@ -64,7 +64,10 @@ class Third_step extends GetView {
                               ),
                             Checkbox(
                               value: item.checked.value,
-                              onChanged: (value) => item.checked.value = value!,
+                              onChanged: (value) {
+                                item.checked.value = value!;
+                                controller.check(item);
+                              },
                             ),
                           ],
                         ),
@@ -111,7 +114,10 @@ class Third_step extends GetView {
                   ElevatedButton(
                     onPressed: () {
                       if (controller.formKey.currentState!.validate()) {
-                        controller.activeIndex.value++;
+                        if (controller.checkboxList
+                            .any((element) => element.checked.value)) {
+                          controller.activeIndex.value++;
+                        }
                       }
                     },
                     child: const Text('Next'),

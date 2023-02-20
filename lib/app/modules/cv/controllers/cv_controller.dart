@@ -56,4 +56,18 @@ class CvController extends GetxController {
     textcontroler2.removeLast();
     index.value--;
   }
+
+  void check(item) {
+    if (item.checked.value) {
+      for (int i = checkboxList.indexOf(item); i >= 0; i--) {
+        checkboxList[i].checked.value = true;
+      }
+    } else {
+      for (int i = checkboxList.indexOf(item); i <= checkboxList.length; i++) {
+        checkboxList[i].checked.value = false;
+      }
+    }
+
+    update();
+  }
 }
