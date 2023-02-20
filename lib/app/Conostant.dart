@@ -7,12 +7,14 @@ class ThemeUtils {
     primarySwatch: Colors.blue,
     brightness: Brightness.light,
     hintColor: Colors.black,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
 
     // next line is important!
   );
   static final dark = ThemeData(
     brightness: Brightness.dark,
     hintColor: Colors.white,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     appBarTheme: const AppBarTheme(
       color: Colors.redAccent,
     ),

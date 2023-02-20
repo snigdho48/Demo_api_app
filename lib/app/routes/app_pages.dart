@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 import 'package:demo_app/app/modules/Imagedashboard/bindings/imagedashboard_binding.dart';
 import 'package:demo_app/app/modules/Imagedashboard/views/imagedashboard_view.dart';
 import 'package:demo_app/app/modules/cv/bindings/cv_binding.dart';
@@ -20,6 +18,7 @@ import 'package:demo_app/app/modules/settings/bindings/settings_binding.dart';
 import 'package:demo_app/app/modules/settings/views/settings_view.dart';
 import 'package:demo_app/app/modules/splash/bindings/splash_binding.dart';
 import 'package:demo_app/app/modules/splash/views/splash_view.dart';
+import 'package:get/get.dart';
 
 part 'app_routes.dart';
 

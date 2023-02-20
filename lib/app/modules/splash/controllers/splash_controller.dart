@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import '../../../data/Api_Get.dart';
 import '../../../shared_pref.dart';
 import '../../networkCheck/controllers/network_check_controller.dart';
 
@@ -9,9 +8,6 @@ class SplashController extends GetxController {
   final connected = Get.put(NetworkCheckController());
 
   Future<void> onInit() async {
-    if (connected.type.value) {
-      await getModel();
-    }
     super.onInit();
   }
 
@@ -24,22 +20,21 @@ class SplashController extends GetxController {
   void onClose() {}
   futureCall() async {
     Future? navigator;
-    if (Get.arguments != null) {
-      navigator = await Get.toNamed('/notifications', arguments: Get.arguments);
-    } else {
-      await getstatus().then((value) {
-        if (value) {
-          Future.delayed(Duration(seconds: 2), () {
-            navigator = Get.offNamed('/home');
-          });
-        } else {
-          Future.delayed(Duration(seconds: 2), () {
-            navigator = Get.offNamed('/login');
-          });
-        }
-      });
-    }
 
+    navigator = await getstatus().then((value) async {
+      if (value) {
+        await getPayload().then((value2) {
+          print('value2: $value2');
+          if (value2.isNotEmpty) {
+            Get.offAllNamed('/notifications', arguments: value2);
+          } else {
+            Get.offAllNamed('/home');
+          }
+        });
+      } else {
+        Get.offAllNamed('/login');
+      }
+    });
     return navigator;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:demo_app/app/shared_pref.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -101,6 +102,7 @@ class NotificationService {
       notificationDetails,
       payload: jsonEncode(payload),
     );
+    await savePayload(list: payload);
   }
 
   Future<void> scheduleNotification(
@@ -127,7 +129,7 @@ class NotificationService {
       payload: jsonEncode(payload),
       matchDateTimeComponents: dateTimeComponents,
     );
-    print('$payload is payload');
+    await savePayload(list: payload);
   }
 
   Future<void> cancelNotification(int id) async {
@@ -140,6 +142,7 @@ class NotificationService {
 
   Future<void> onSelectNotification(String? payload) async {
     final json = jsonDecode(payload!);
-    await Get.toNamed('/splash', arguments: json);
+    await savePayload(list: json);
+    await Get.toNamed('/notifications', arguments: json);
   }
 }

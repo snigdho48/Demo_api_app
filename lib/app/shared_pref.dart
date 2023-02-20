@@ -11,6 +11,23 @@ Future<void> saveNoti({required List list}) async {
   await pref.setStringList('encode', encode);
 }
 
+Future<void> savePayload({required List list}) async {
+  final pref = await SharedPreferences.getInstance();
+  final encode =
+      List.generate(list.length, (index) => jsonEncode(list[index].toString()));
+  await pref.setStringList('payload', encode);
+}
+
+Future<List> getPayload() async {
+  final pref = await SharedPreferences.getInstance();
+  final store = pref.getStringList('payload') ?? [];
+  List decoded =
+      List.generate(store.length, (index) => jsonDecode(store[index]));
+  print('find payload, $decoded');
+  savePayload(list: []);
+  return decoded;
+}
+
 Future<List> getNoti() async {
   final pref = await SharedPreferences.getInstance();
   final store = pref.getStringList('encode') ?? [];

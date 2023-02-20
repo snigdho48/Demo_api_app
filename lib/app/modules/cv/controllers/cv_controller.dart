@@ -21,6 +21,8 @@ class CvController extends GetxController {
   final gender = RadioGroupController().obs;
   final activeIndex = 0.obs;
   final index = (-1).obs;
+  final enable = false.obs;
+  final enable1 = false.obs;
   RxList<TextEditingController> textcontroler1 =
       RxList<TextEditingController>([]);
   RxList<TextEditingController> textcontroler2 =

@@ -42,14 +42,28 @@ class Third_step extends GetView {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20),
                                   child: TextFormField(
+                                    keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please Enter your CGPA';
+                                      } else if (double.parse(value) > 5.00 &&
+                                          controller.checkboxList
+                                                  .indexOf(item) <
+                                              2) {
+                                        return 'Please Enter valid CGPA';
+                                      } else if (double.parse(value) > 4.00 &&
+                                          controller.checkboxList
+                                                  .indexOf(item) >=
+                                              2) {
+                                        return 'Please Enter valid CGPA';
                                       }
                                       return null;
                                     },
-                                    onChanged: (value) =>
-                                        item.value.value = value,
+                                    onChanged: (value) {
+                                      item.value.value = value;
+                                      controller.formKey.currentState!
+                                          .validate();
+                                    },
                                     decoration: InputDecoration(
                                         constraints: BoxConstraints(
                                             maxHeight: 60, minHeight: 60),
@@ -116,7 +130,9 @@ class Third_step extends GetView {
                       if (controller.formKey.currentState!.validate()) {
                         if (controller.checkboxList
                             .any((element) => element.checked.value)) {
-                          controller.newindex();
+                          if (controller.textcontroler1.length < 0) {
+                            controller.newindex();
+                          }
                           controller.activeIndex.value++;
                         }
                       }

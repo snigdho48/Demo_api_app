@@ -42,12 +42,17 @@ class Fourth_step extends GetView {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    controller.newindex();
-                    controller.update();
-                  },
-                  child: Text('Add Experience')),
+              Obx(
+                () => ElevatedButton(
+                    onPressed:
+                        controller.enable.value && controller.enable1.value
+                            ? () {
+                                controller.newindex();
+                                controller.update();
+                              }
+                            : null,
+                    child: Text('Add Experience')),
+              ),
               ElevatedButton(
                   onPressed: () {
                     if (controller.index.value <= 0) {
@@ -129,6 +134,13 @@ class Experience_list extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: controller.textcontroler1[id],
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      controller.enable1.value = true;
+                    } else {
+                      controller.enable1.value = false;
+                    }
+                  },
                   decoration: InputDecoration(
                       hintText: 'Professional Summary',
                       border: OutlineInputBorder(
@@ -154,6 +166,13 @@ class Experience_list extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: controller.textcontroler2[id],
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      controller.enable.value = true;
+                    } else {
+                      controller.enable.value = false;
+                    }
+                  },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       hintText: 'Year of Experience',
