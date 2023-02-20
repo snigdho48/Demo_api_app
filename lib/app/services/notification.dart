@@ -140,6 +140,6 @@ class NotificationService {
 
   Future<void> onSelectNotification(String? payload) async {
     final json = jsonDecode(payload!);
-    await Get.toNamed('/notifications', arguments: json);
+    await Get.toNamed('/splash', arguments: json);
   }
 }

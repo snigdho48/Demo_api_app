@@ -24,9 +24,9 @@ class SplashController extends GetxController {
   void onClose() {}
   futureCall() async {
     Future? navigator;
-    if(Get.arguments != null){
-      await Get.toNamed('/notifications', arguments: Get.arguments);
-    }else{
+    if (Get.arguments != null) {
+      navigator = await Get.toNamed('/notifications', arguments: Get.arguments);
+    } else {
       await getstatus().then((value) {
         if (value) {
           Future.delayed(Duration(seconds: 2), () {

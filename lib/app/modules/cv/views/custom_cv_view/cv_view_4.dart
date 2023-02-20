@@ -50,8 +50,17 @@ class Fourth_step extends GetView {
                   child: Text('Add Experience')),
               ElevatedButton(
                   onPressed: () {
-                    controller.removeindex();
-                    controller.update();
+                    if (controller.index.value <= 0) {
+                      Get.snackbar(
+                        "Error",
+                        "Please add atleast one experience",
+                        snackStyle: SnackStyle.FLOATING,
+                        margin: EdgeInsets.only(top: Get.height * .05),
+                      );
+                    } else {
+                      controller.removeindex();
+                      controller.update();
+                    }
                   },
                   child: Text('Remove Experience')),
             ],
@@ -69,8 +78,13 @@ class Fourth_step extends GetView {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Get.to(() => const Final_review());
-                      controller.activeIndex.value = 0;
+                      if (controller.index.value < 0) {
+                        Get.snackbar(
+                            "Error", "Please add atleast one experience");
+                      } else {
+                        Get.to(() => const Final_review());
+                        controller.activeIndex.value = 0;
+                      }
                     },
                     child: const Text('Next'),
                   ),

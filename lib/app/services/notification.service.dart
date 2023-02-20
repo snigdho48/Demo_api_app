@@ -91,9 +91,6 @@ Future<void> onStart(ServiceInstance service) async {
             [DeviceOrientation.portraitUp]);
       });
     }
-    // service.on('setAsBackground').listen((event) async {
-    //   await getandsetAllPush();
-    // });
   });
 }
 

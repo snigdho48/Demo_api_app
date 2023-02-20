@@ -116,6 +116,7 @@ class Third_step extends GetView {
                       if (controller.formKey.currentState!.validate()) {
                         if (controller.checkboxList
                             .any((element) => element.checked.value)) {
+                          controller.newindex();
                           controller.activeIndex.value++;
                         }
                       }
