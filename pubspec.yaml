@@ -12,7 +12,7 @@ dependencies:
   easy_splash_screen: 1.0.4
   hexcolor: 3.0.1
   stylish_bottom_bar: 1.0.0
-  dio: 4.0.6
+  dio: ^5.0.3
   flutter_easyloading: 3.0.5
   get_storage: 2.0.3
   flutter_switch: 0.3.2
